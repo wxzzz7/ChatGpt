@@ -1,1 +1,20 @@
+import telebot
+from openai import OpenAI
 
+# Твой токен от бота
+TOKEN = '7770217664:AAFGnP7q201CNMze0PF5cfm3WE6QKnUSXA0'
+
+# API ключ OpenAI
+openai_api_key = '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'
+
+bot = telebot.TeleBot(TOKEN)
+
+@bot.message_handler(content_types=['text'])
+def handle_text(message):
+    response = OpenAI(api_key=openai_api_key).chat.completions.create(
+        model="gpt-4",
+        messages=[{"role": "user", "content": message.text}]
+    )
+    bot.send_message(message.chat.id, response.choices[0].message.content)
+
+bot.polling()
